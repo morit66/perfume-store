@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أوركيد للعطور الفاخرة | Orchid Perfumes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0d0e12;
+            --card-bg: #161820;
+            --gold: #d4af37;
+            --gold-hover: #f3ce5a;
+            --text-light: #f4f4f6;
+            --text-muted: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); line-height: 1.6; }
+        
+        /* Header */
+        header {
+            background: rgba(13, 14, 18, 0.95);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: var(--gold); letter-spacing: 1px; }
+        .cart-btn {
+            background: var(--gold); color: #000; border: none; padding: 0.5rem 1.2rem;
+            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s;
+        }
+        .cart-btn:hover { background: var(--gold-hover); }
+
+        /* Hero Section with Real Background Image */
+        .hero {
+            text-align: center; padding: 6rem 5%;
+            background: linear-gradient(rgba(13, 14, 18, 0.78), rgba(13, 14, 18, 0.92)),
+                        url('https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #fff; font-weight: 800; }
+        .hero span { color: var(--gold); }
+        .hero p { color: #d1d5db; max-width: 600px; margin: 0 auto 2rem; font-size: 1.05rem; }
+        .cta-btn {
+            background: linear-gradient(45deg, var(--gold), #b8860b);
+            color: #000; padding: 0.85rem 2.2rem; border-radius: 30px; text-decoration: none;
+            font-weight: 800; display: inline-block; transition: 0.3s; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .cta-btn:hover { transform: translateY(-2px); }
+
+        /* Products Grid */
+        .container { max-width: 1150px; margin: 3rem auto; padding: 0 5%; }
+        .section-title { text-align: center; font-size: 1.9rem; margin-bottom: 2.5rem; color: var(--gold); font-weight: 800; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.8rem; }
+        .card {
+            background: var(--card-bg); border-radius: 16px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06); transition: transform 0.3s, border-color 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+        .card:hover { transform: translateY(-6px); border-color: var(--gold); }
+        .card-img-wrap {
+            height: 240px; width: 100%; overflow: hidden; position: relative; background: #1f222d;
+        }
+        .card-img-wrap img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;
+        }
+        .card:hover .card-img-wrap img { transform: scale(1.07); }
+        .badge {
+            position: absolute; top: 12px; right: 12px; background: var(--gold); color: #000;
+            font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 20px;
+        }
+        .card-body { padding: 1.5rem; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; color: #fff; }
+        .card-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.2rem; min-height: 45px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem; }
+        .price { font-size: 1.35rem; font-weight: 800; color: var(--gold); }
+        .add-btn {
+            background: transparent; border: 1.5px solid var(--gold); color: var(--gold);
+            padding: 0.45rem 1.1rem; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s;
+        }
+        .add-btn:hover { background: var(--gold); color: #000; }
+
+        /* Cart Modal */
+        .modal {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            justify-content: center; align-items: center; z-index: 200; padding: 1rem;
+        }
+        .modal-content {
+            background: var(--card-bg); padding: 2rem; border-radius: 16px;
+            width: 100%; max-width: 450px; border: 1px solid var(--gold);
+        }
+        .cart-item { display: flex; justify-content: space-between; padding: 0.7rem 0; border-bottom: 1px solid #2d303e; }
+        .whatsapp-btn {
+            width: 100%; background: #25D366; color: #fff; border: none; padding: 0.85rem;
+            border-radius: 8px; font-weight: 700; font-size: 1rem; margin-top: 1.5rem; cursor: pointer;
+        }
+        .close-btn { background: #374151; color: #fff; border: none; padding: 0.55rem 1rem; border-radius: 6px; margin-top: 0.6rem; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">ORCHID | أوركيد</div>
+    <button class="cart-btn" onclick="toggleCart()">🛒 السلة (<span id="cart-count">0</span>)</button>
+</header>
+
+<section class="hero">
+    <h1>فخامة العطور الشرقية بلمسة <span>عصرية</span></h1>
+    <p>اكتشف تشكيلتنا المختارة من أرقى العطور والعود الطبيعي، مع خدمة التوصيل السريع والدفع عند الاستلام.</p>
+    <a href="#products" class="cta-btn">تصفح التشكيلة الآن</a>
+</section>
+
+<div class="container" id="products">
+    <h2 class="section-title">الأكثر مبيعاً</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="card-img-wrap">
+                <span class="badge">الأكثر طلباً</span>
+                <img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80" alt="عطر عود ملكي">
+            </div>
+            <div class="card-body">
+                <div class="card-title">عطر عود ملكي - 100 مل</div>
+                <div class="card-desc">مزيج فاخر من العود الكمبودي المعتق مع لمسات العنبر والزعفران.</div>
+                <div class="card-footer">
+                    <span class="price">$45</span>
+                    <button class="add-btn" onclick="addToCart('عطر عود ملكي', 45)">+ أضف للسلة</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-img-wrap">
+                <span class="badge">جديد</span>
+                <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80" alt="مسك الليل الفاخر">
+            </div>
+            <div class="card-body">
+                <div class="card-title">مسك الليل الفاخر - 50 مل</div>
+                <div class="card-desc">رائحة هادئة وجذابة تدوم لأكثر من 24 ساعة بتركيز عالٍ.</div>
+                <div class="card-footer">
+                    <span class="price">$30</span>
+                    <button class="add-btn" onclick="addToCart('مسك الليل الفاخر', 30)">+ أضف للسلة</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-img-wrap">
+                <span class="badge">عرض خاص</span>
+                <img src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80" alt="مجموعة الإهداء الذهبية">
+            </div>
+            <div class="card-body">
+                <div class="card-title">مجموعة الإهداء الذهبية</div>
+                <div class="card-desc">بوكس فاخر يحتوي على 3 عطور متنوعة مناسبة للإهداء والمناسبات.</div>
+                <div class="card-footer">
+                    <span class="price">$85</span>
+                    <button class="add-btn" onclick="addToCart('مجموعة الإهداء الذهبية', 85)">+ أضف للسلة</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+    <div class="modal-content">
+        <h3 style="color: var(--gold); margin-bottom: 1rem;">سلة المشتريات</h3>
+        <div id="cart-items">السلة فارغة حالياً</div>
+        <div style="margin-top: 1rem; font-weight: 800; font-size: 1.2rem;">الإجمالي: $<span id="total-price">0</span></div>
+        <button class="whatsapp-btn" onclick="orderWhatsApp()">إتمام الطلب عبر واتساب 💬</button>
+        <button class="close-btn" onclick="toggleCart()">إغلاق</button>
+    </div>
+</div>
+
+<script>
+    let cart = [];
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        document.getElementById('cart-count').innerText = cart.length;
+        alert('تمت إضافة "' + name + '" إلى السلة بنجاح!');
+    }
+    function toggleCart() {
+        const modal = document.getElementById('cartModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        renderCart();
+    }
+    function renderCart() {
+        const container = document.getElementById('cart-items');
+        let total = 0;
+        if (cart.length === 0) {
+            container.innerHTML = '<p style="color:#9ca3af">السلة فارغة حالياً</p>';
+        } else {
+            container.innerHTML = cart.map(item => {
+                total += item.price;
+                return `<div class="cart-item"><span>${item.name}</span><span style="color:var(--gold)">$${item.price}</span></div>`;
+            }).join('');
+        }
+        document.getElementById('total-price').innerText = total;
+    }
+    function orderWhatsApp() {
+        if (cart.length === 0) return alert('الرجاء إضافة منتجات للسلة أولاً');
+        let text = "مرحباً، أرغب بطلب المنتجات التالية:%0A";
+        cart.forEach(i => text += `- ${i.name} ($${i.price})%0A`);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+</script>
+</body>
+</html>
